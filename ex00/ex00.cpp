@@ -18,6 +18,7 @@
 #include "Matrix.hpp"
 
 
+
 int main() {
     // Test vector creation
     Vector<int> vec1 = {1, 2, 3};
@@ -36,7 +37,21 @@ int main() {
     Vector<int> result_scale = vec1 * scalar;
     std::cout << "Scaling: " << result_scale << std::endl;
 
-    Matrix<int, 3, 5>  mat = {}
+    // Test matrix creation
+    Matrix<int, 2, 3> mat1 = {{1, 2, 3}, {4, 5, 6}};
+    Matrix<int, 2, 3> mat2 = {{7, 8, 9}, {10, 11, 12}};
+
+    // Test matrix addition
+    Matrix<int, 2, 3> mat_result_add = mat1 + mat2;
+    std::cout << "Matrix Addition:\n" << mat_result_add;
+
+    // Test matrix subtraction
+    Matrix<int, 2, 3> mat_result_sub = mat1 - mat2;
+    std::cout << "Matrix Subtraction:\n" << mat_result_sub;
+
+    // Test matrix scaling
+    Matrix<int, 2, 3> mat_result_scale = mat1 * scalar;
+    std::cout << "Matrix Scaling:\n" << mat_result_scale;
 
     return 0;
 }
