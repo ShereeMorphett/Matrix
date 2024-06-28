@@ -14,10 +14,25 @@
 // vectors of different sizes), the result is undefined.
 
 
-#include "vector.hpp"
+#include "Vector.hpp"
 
-int main(void)
-{
-    vector vec<int> = {1, 2 , 3};
+int main() {
+    // Test vector creation
+    Vector<int> vec1 = {1, 2, 3};
+    Vector<int> vec2 = {4, 5, 6};
 
+    // Test addition
+    Vector<int> result_add = vec1 + vec2;
+    std::cout << "Addition: " << result_add << std::endl;
+
+    // Test subtraction
+    Vector<int> result_sub = vec1 - vec2;
+    std::cout << "Subtraction: " << result_sub << std::endl;
+
+    // Test scaling
+    int scalar = 2;
+    Vector<int> result_scale = vec1 * scalar;
+    std::cout << "Scaling: " << result_scale << std::endl;
+
+    return 0;
 }
