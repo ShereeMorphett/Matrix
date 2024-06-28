@@ -6,11 +6,6 @@
 #include <limits>
 #include <cmath>
 
-// impl<K> Vector<K> {
-// fn add(&mut self, v: &Vector<K>);
-// fn sub(&mut self, v: &Vector<K>);
-// fn scl(&mut self, a: K);
-// }
 
 template <typename T>
 struct Vector
@@ -82,7 +77,7 @@ struct Vector
     }
 
 };
-// Overload the stream insertion operator for easy printing
+
 template <typename T>
 std::ostream& operator<<(std::ostream& os, const Vector<T>& vec)
 {

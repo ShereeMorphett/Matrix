@@ -15,6 +15,8 @@
 
 
 #include "Vector.hpp"
+#include "Matrix.hpp"
+
 
 int main() {
     // Test vector creation
@@ -33,6 +35,8 @@ int main() {
     int scalar = 2;
     Vector<int> result_scale = vec1 * scalar;
     std::cout << "Scaling: " << result_scale << std::endl;
+
+    Matrix<int, 3, 5>  mat = {}
 
     return 0;
 }
