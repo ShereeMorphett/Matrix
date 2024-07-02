@@ -73,7 +73,5 @@ int main() {
         std::cout << "The matrix is square." << std::endl;
     else
         std::cout << "The matrix is not square." << std::endl;
-
-
     return 0;
 }
