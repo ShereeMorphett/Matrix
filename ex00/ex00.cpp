@@ -40,6 +40,7 @@ int main() {
     // Test matrix creation
     Matrix<int, 2, 3> mat1 = {{1, 2, 3}, {4, 5, 6}};
     Matrix<int, 2, 3> mat2 = {{7, 8, 9}, {10, 11, 12}};
+    std::vector<std::vector<int>> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
     // Test matrix addition
     Matrix<int, 2, 3> mat_result_add = mat1 + mat2;
@@ -52,6 +53,15 @@ int main() {
     // Test matrix scaling
     Matrix<int, 2, 3> mat_result_scale = mat1 * scalar;
     std::cout << "Matrix Scaling:\n" << mat_result_scale;
+
+
+    auto size = getMatrixSize(matrix);
+    std::cout << "Rows: " << size.first << ", Columns: " << size.second << std::endl;
+
+    if (isSquareMatrix(matrix))
+        std::cout << "The matrix is square." << std::endl;
+    else
+        std::cout << "The matrix is not square." << std::endl;
 
     return 0;
 }
