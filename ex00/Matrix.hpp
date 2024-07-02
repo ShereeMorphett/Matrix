@@ -1,60 +1,37 @@
-#pragma once
-
 #include <iostream>
-#include <vector>
+#include <array>
 #include <stdexcept>
-#include <pair>
+#include <utility>
 
-
-
-// A function to return the size/shape of a vector/matrix.
-// • A function to tell if a matrix is square.
-// • A function to reshape a vector into a matrix, and vice-versa.
-
-template <typename T, int rows, int cols>
+// Matrix class
+template <typename T, int Rows, int Cols>
 class Matrix
 {
     public:
-        std::vector<std::vector<T>> components;
+        std::array<std::array<T, Cols>, Rows> components;
+        const int rows = Rows;
+        const int cols = Cols;
 
-        // Constructor
-        Matrix(std::initializer_list<std::initializer_list<T>> init)
-        {
-            if (init.size() != rows || (init.size() > 0 && init.begin()->size() != cols))
+
+        Matrix(std::initializer_list<std::initializer_list<T>> init) {
+            if (init.size() != Rows || (init.size() > 0 && init.begin()->size() != Cols))
                 throw std::invalid_argument("Matrix dimensions do not match.");
-            for (auto& row : init)
-            {
-                components.push_back(std::vector<T>(row));
+            auto row_it = init.begin();
+            for (int i = 0; i < Rows; ++i, ++row_it) {
+                auto col_it = row_it->begin();
+                for (int j = 0; j < Cols; ++j, ++col_it) {
+                    components[i][j] = *col_it;
+                }
             }
         }
 
-        template <typename T>
-        std::pair<size_t, size_t> getMatrixSize(const std::vector<std::vector<T>>& matrix)
-        {
-            size_t rows = matrix.size();
-            size_t cols = rows > 0 ? matrix[0].size() : 0;
-            return {rows, cols};
-        }
-
-        template <typename T>
-        bool isSquareMatrix(const std::vector<std::vector<T>>& matrix)
-        {
-            size_t rows = matrix.size();
-            if (rows == 0)
-                return true;
-            size_t cols = matrix[0].size();
-            return rows == cols;
-        }
-
-
         // Addition
-        Matrix operator+(const Matrix& rhs) const
-        {
-            if (components.size() != rhs.components.size() || components[0].size() != rhs.components[0].size())
+        Matrix operator+(const Matrix& rhs) const {
+            if (Rows != rhs.rows || Cols != rhs.cols)
                 throw std::invalid_argument("Matrix addition requires matrices of the same size.");
             Matrix result = *this;
-            for (size_t i = 0; i < components.size(); ++i) {
-                for (size_t j = 0; j < components[i].size(); ++j) {
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
                     result.components[i][j] += rhs.components[i][j];
                 }
             }
@@ -62,13 +39,12 @@ class Matrix
         }
 
         // Subtraction
-        Matrix operator-(const Matrix& rhs) const
-        {
-            if (components.size() != rhs.components.size() || components[0].size() != rhs.components[0].size())
+        Matrix operator-(const Matrix& rhs) const {
+            if (Rows != rhs.rows || Cols != rhs.cols)
                 throw std::invalid_argument("Matrix subtraction requires matrices of the same size.");
             Matrix result = *this;
-            for (size_t i = 0; i < components.size(); ++i) {
-                for (size_t j = 0; j < components[i].size(); ++j) {
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
                     result.components[i][j] -= rhs.components[i][j];
                 }
             }
@@ -76,31 +52,36 @@ class Matrix
         }
 
         // Scaling
-        Matrix operator*(const T scalar) const
-        {
+        Matrix operator*(const T scalar) const {
             Matrix result = *this;
-            for (size_t i = 0; i < components.size(); ++i)
-            {
-                for (size_t j = 0; j < components[i].size(); ++j) {
+            for (int i = 0; i < Rows; ++i) {
+                for (int j = 0; j < Cols; ++j) {
                     result.components[i][j] *= scalar;
                 }
             }
             return result;
         }
 
-
-    // Output
-    friend std::ostream& operator<<(std::ostream& os, const Matrix<T, rows, cols>& mat) {
-        for (size_t i = 0; i < mat.components.size(); ++i) {
-            os << "[ ";
-            for (size_t j = 0; j < mat.components[i].size(); ++j) {
-                os << mat.components[i][j];
-                if (j != mat.components[i].size() - 1) {
-                    os << ", ";
-                }
-            }
-            os << " ]\n";
+        std::pair<size_t, size_t> getMatrixSize() const {
+            return {Rows, Cols};
         }
-        return os;
-    }
+
+        bool isSquareMatrix() const {
+            return Rows == Cols;
+        }
+
+        // Output
+        friend std::ostream& operator<<(std::ostream& os, const Matrix<T, Rows, Cols>& mat) {
+            for (int i = 0; i < Rows; ++i) {
+                os << "[ ";
+                for (int j = 0; j < Cols; ++j) {
+                    os << mat.components[i][j];
+                    if (j != Cols - 1) {
+                        os << ", ";
+                    }
+                }
+                os << " ]\n";
+            }
+            return os;
+        }
 };

@@ -16,6 +16,7 @@
 
 #include "Vector.hpp"
 #include "Matrix.hpp"
+#include "colours.hpp"
 
 
 
@@ -25,43 +26,54 @@ int main() {
     Vector<int> vec2 = {4, 5, 6};
 
     // Test addition
+    std::cout <<  FGRN("Testing Vector Addition\n") << std::endl;
     Vector<int> result_add = vec1 + vec2;
+    std::cout <<  FGRN("Expected output: Addition: 4, 7, 9") << std::endl;
     std::cout << "Addition: " << result_add << std::endl;
 
     // Test subtraction
+    std::cout <<  FGRN("\nTesting Vector Subtraction\n") << std::endl;
     Vector<int> result_sub = vec1 - vec2;
+    std::cout <<  FGRN("Expected output: Subtraction: 3, 3, 3") << std::endl;
     std::cout << "Subtraction: " << result_sub << std::endl;
 
     // Test scaling
     int scalar = 2;
+    std::cout <<  FGRN("\nTesting Vector scaling\n") << std::endl;
+    std::cout <<  FGRN("Expected output: Scaling: 2, 4, 6") << std::endl;
     Vector<int> result_scale = vec1 * scalar;
     std::cout << "Scaling: " << result_scale << std::endl;
 
     // Test matrix creation
     Matrix<int, 2, 3> mat1 = {{1, 2, 3}, {4, 5, 6}};
     Matrix<int, 2, 3> mat2 = {{7, 8, 9}, {10, 11, 12}};
-    std::vector<std::vector<int>> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
+    Matrix<int, 3, 3> matrix = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}};
 
     // Test matrix addition
+    std::cout <<  FGRN("Testing Matrix Addition\n") << std::endl;
     Matrix<int, 2, 3> mat_result_add = mat1 + mat2;
-    std::cout << "Matrix Addition:\n" << mat_result_add;
+    std::cout <<  FGRN("Expected output: Addition: {9, 10, 13}, {14, 16, 18}") << std::endl;
+    std::cout << "Addition: " << mat_result_add << std::endl;
+
 
     // Test matrix subtraction
+    std::cout <<  FGRN("Testing Matrix subtraction\n") << std::endl;
     Matrix<int, 2, 3> mat_result_sub = mat1 - mat2;
-    std::cout << "Matrix Subtraction:\n" << mat_result_sub;
-
-    // Test matrix scaling
-    Matrix<int, 2, 3> mat_result_scale = mat1 * scalar;
-    std::cout << "Matrix Scaling:\n" << mat_result_scale;
+    std::cout <<  FGRN("Expected output: subtraction: {-6, -6, -6}, {-6, -6, -6}") << std::endl;
+    std::cout << "subtraction: " << mat_result_sub << std::endl;
 
 
-    auto size = getMatrixSize(matrix);
+
+    std::cout <<  FGRN("Testing Matrix size and square\n") << std::endl;
+    std::cout << KCYN << matrix << RST << std::endl;
+    auto size = matrix.getMatrixSize();
     std::cout << "Rows: " << size.first << ", Columns: " << size.second << std::endl;
 
-    if (isSquareMatrix(matrix))
+    if (matrix.isSquareMatrix())
         std::cout << "The matrix is square." << std::endl;
     else
         std::cout << "The matrix is not square." << std::endl;
+
 
     return 0;
 }

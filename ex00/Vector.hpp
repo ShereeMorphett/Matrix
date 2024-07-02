@@ -6,9 +6,6 @@
 #include <limits>
 #include <cmath>
 
-
-/* • A function to reshape a vector into a matrix, and vice-versa.*/
-
 template <typename T>
 struct Vector
 {
@@ -91,3 +88,5 @@ std::ostream& operator<<(std::ostream& os, const Vector<T>& vec)
     os << " ]";
     return os;
 }
+
+
