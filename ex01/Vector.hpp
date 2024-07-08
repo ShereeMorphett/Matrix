@@ -90,18 +90,18 @@ std::ostream& operator<<(std::ostream& os, const Vector<T>& vec)
 }
 
 template <typename T>
-Vector<T> linear_combination(Vector<T> const & u, Vector<T> const & coefs)
+Vector<T> linear_combination(Vector<Vector<T>> const & u, Vector<T> const & coefs)
 {
     if (u.size() != coefs.size()) {
         throw std::invalid_argument("Vectors and coefficients must be of the same size.");
     }
 
     // Initialize result vector with zeros
-    Vector<T> result(Vector<T>(u[0].size(), 0));
+    Vector<T> result = {};
 
     // Compute the linear combination
     for (size_t i = 0; i < u.size(); ++i) {
-        result = result + (u[i] * coefs[i]);
+        result = result + (u[i] * coefs[i]); //TODO: THIS IS INCORRECT
     }
 
     return result;

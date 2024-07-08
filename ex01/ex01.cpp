@@ -36,10 +36,10 @@ int main() {
     Vector<double> v3({7.0, 8.0, 9.0});
 
     // Define coefficients
-    std::vector<double> coefs = {0.5, 1.5, -1.0};
+    Vector<double> coefs = {0.5, 1.5, -1.0};
 
     // Collect vectors into a vector
-    std::vector<Vector<double>> vectors = {v1, v2, v3};
+    Vector<Vector<double>> vectors = {v1, v2, v3};
 
     try {
         // Calculate the linear combination
