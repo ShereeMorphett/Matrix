@@ -1,30 +1,49 @@
-/*Fused Multiply-Add
-It computes the value x * y + z with an exact double-length product,
-followed by an addition with a single rounding. 
-Numerical computation often needs pairs of multiply and add operations,
-for which the FMA is well-suited */
-
-
 #include "Vector.hpp"
 #include "Matrix.hpp"
 #include "colours.hpp"
+#include <stdexcept>
+#include <iostream>
 
-/*You must write a function that computes a linear combination of the vectors provided,
-using the corresponding scalar coefficients.
+/*Linear combinations are fundamental operations in various fields of science, engineering, and computer science. They are used to solve numerous real-world problems. 
 
-You must also turn in a main function in order to test your function, ready to be
-compiled (if necessary) and run.
+Here are some common use cases for linear combinations in programming:
 
-• Let u = (u1, ..., uk) ∈ V
-k be a list of size k, containing vectors (V is a vector space).
-• Let λ = (λ1, ..., λk) ∈ Kk be a list of size k, containing scalars.
-You must calculate the linear combination of the vectors of u scaled by their respective
-coefficients in λ.
-If the two arrays provided as input are not of the same size, or if the array’s contents
-are incoherent, the result is undefined.
-The prototype of the function to write is the following:
+1. Computer Graphics and Image Processing
+Transformation of Coordinates: Linear combinations are used to transform coordinates of points in space. This is essential in 3D graphics for translating, scaling, and rotating objects.
+Blending and Interpolation: Linear combinations are used to interpolate between colors or shapes, creating smooth transitions in animations or blending images.
 
-fn linear_combination::<K>(u: &[Vector<K>], coefs: &[K]) -> Vector<K>;
+2. Machine Learning and Data Science
+Linear Regression: Linear combinations are at the core of linear regression models, where the goal is to find the best-fit line for a set of data points.
+Feature Engineering: Combining different features linearly to create new features that might be more predictive or useful for a model.
+Neural Networks: The weighted sum (linear combination) of inputs is calculated at each neuron in a neural network.
+
+3. Signal Processing
+Filtering: Linear combinations of signal samples are used in the design of filters that can remove noise or extract certain features from a signal.
+Fourier Transforms: Decomposing a signal into its constituent frequencies involves linear combinations.
+
+4. Physics and Engineering
+Solving Systems of Linear Equations: Linear combinations are used to solve systems of linear equations, which are common in engineering for modeling physical systems.
+Mechanics: Calculating the resultant of multiple forces acting on a body involves taking the linear combination of vectors representing the forces.
+
+5. Economics and Finance
+Portfolio Management: In finance, a portfolio is a linear combination of different assets. The goal is often to find the optimal combination that maximizes return while minimizing risk.
+Cost Functions: Linear combinations are used in defining and optimizing cost functions.
+
+6. Robotics
+Motion Planning: Calculating the trajectory of a robot involves linear combinations of vectors to determine the path and movement.
+Control Systems: Linear control systems often use linear combinations of state variables to design controllers that maintain desired performance.
+
+Explanation of the Example
+Points in Space: pointA and pointB represent two points in 3D space.
+Interpolation Factor: t is the interpolation factor. When t is 0.5, it calculates the midpoint. When t is 0, it returns pointA, and when t is 1, it returns pointB.
+Linear Combination: The interpolated point is calculated as a linear combination of pointA and pointB.
+This simple example demonstrates how linear combinations can be used in computer graphics to interpolate between points, a common operation in animations and modeling.
+
+https://en.wikipedia.org/wiki/Linear_combination
+
+https://www.youtube.com/watch?v=WJlQzgS_itI
+
+
 
 */
 
@@ -43,10 +62,10 @@ int main() {
 
     try {
         // Calculate the linear combination
-        Vector<double> result = linear_combination(vectors, coefs);
+        Vector<double> result = Vector<double>::linear_combination(vectors, coefs);
 
         // Display the result
-        std::cout <<  FGRN("\nLinear combination result: \n") << std::endl;
+        std::cout << FGRN("\nLinear combination result: \n") << std::endl;
         std::cout << result << std::endl;
     } catch (const std::exception& e) {
         std::cerr << e.what() << std::endl;
