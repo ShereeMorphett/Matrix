@@ -1,5 +1,7 @@
 #include "amv_math.hpp"
 #include "colours.hpp"
+#include "Vector.hpp"
+
 #include <vector>
 
 #include <stdexcept>
