@@ -20,7 +20,7 @@ int main() {
     Vector<float> u = {1.0, 0.0};
     Vector<float> v = {0.0, 1.0};
 
-    std::cout << FCYN("Expected Output: ") << std::endl;
+    std::cout << FCYN("Expectedt: ") << std::endl;
     std::cout << FCYN("1.0") << std::endl;
     std::cout << angle_cos(u, v);
 
