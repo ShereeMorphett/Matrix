@@ -5,6 +5,8 @@
 #include <sstream>
 #include <limits>
 #include <cmath>
+#include <cassert>
+
 
 template <typename T>
 struct Vector
@@ -74,7 +76,7 @@ struct Vector
     }
     
     
-    T dot(Vector const & b)
+    T dot(Vector const & b) const
     {
         if (components.size() != b.size())
         {
@@ -92,7 +94,7 @@ struct Vector
     }
 
 
-    T norm_one()
+    T norm_one() const
     {
         T result = 0;
 
@@ -105,7 +107,7 @@ struct Vector
     }
 
 
-    T norm()
+    T norm() const
     {
         T result = 0;
 
@@ -118,7 +120,7 @@ struct Vector
 
     }
 
-    T norm_inf()
+    T norm_inf() const
     {
 
         if (components.empty())
@@ -161,12 +163,16 @@ VecType lerp( VecType const & u, VecType  const & v, float t) {
 }
 
 
+// Method to compute the cosine of the angle between two vectors
+
 template <typename T>
-T angle_cos(Vector<T> const & u, Vector<T> const & v)
+T angle_cos(const Vector<T>& u, const Vector<T>& v)
 {
-
+    T dot_product = u.dot(v);
+    T norm_product = u.norm() * v.norm();
+    assert(norm_product != 0);
+    return dot_product / norm_product;
 }
-
 
 
 template <typename T>
