@@ -148,6 +148,23 @@ T lerp_single(T const & u, T const & v, float t)
     return u + t * (v - u);
 }
 
+template<typename T>
+Vector<T> cross_product(Vector<T> & v, Vector<T> & u)
+{
+    if (v.size() != 3 || u.size() != 3)
+        throw std::invalid_argument("Cross product is defined only for 3-dimensional vectors");
+
+    Vector<T> result = {0.0, 0.0, 0.0} ;
+
+    result[0] = v[1] * u[2] - v[2] * u[1];
+    result[1] = v[2] * u[0] - v[0] * u[2];
+    result[2] = v[0] * u[1] - v[1] * u[0];
+    
+    return result;
+}
+
+
+
 template <typename VecType>
 VecType lerp( VecType const & u, VecType  const & v, float t) {
     if (u.size() != v.size()) {
@@ -164,7 +181,8 @@ VecType lerp( VecType const & u, VecType  const & v, float t) {
 
 
 // Method to compute the cosine of the angle between two vectors
-
+// The cosine of the angle between two vectors 
+// u and v can be found using the dot product and the magnitudes (norms) of the vectors
 template <typename T>
 T angle_cos(const Vector<T>& u, const Vector<T>& v)
 {

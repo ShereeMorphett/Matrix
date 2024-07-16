@@ -164,7 +164,8 @@ VecType lerp( VecType const & u, VecType  const & v, float t) {
 
 
 // Method to compute the cosine of the angle between two vectors
-
+// The cosine of the angle between two vectors 
+// u and v can be found using the dot product and the magnitudes (norms) of the vectors
 template <typename T>
 T angle_cos(const Vector<T>& u, const Vector<T>& v)
 {
