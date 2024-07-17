@@ -26,6 +26,15 @@ class Matrix
                 }
             }
         }
+        std::array<T, Cols>& operator[](int index)
+        {
+            return components[index];
+        }
+
+        const std::array<T, Cols>& operator[](int index) const
+        {
+            return components[index];
+        }
 
         // Addition
         Matrix operator+(const Matrix& rhs) const {
@@ -82,16 +91,26 @@ class Matrix
             return Rows == Cols;
         }
 
-        Vector<T> mul_vec(Vector<T> vec)
-        {
-
+    Vector<T> mul_vec(const Vector<T>& vec) const
+    {
+        if (Cols != vec.size()) {
+            throw std::invalid_argument("Matrix columns must match vector size for multiplication.");
         }
 
-
-        Matrix<T> mul_mat(Matrix<T> other)
-        {
-
+        Vector<T> result(std::vector<T>(Rows, 0));  // Initialize result vector with zeros
+        for (int i = 0; i < Rows; ++i) {
+            for (int j = 0; j < Cols; ++j) {
+                result[i] += components[i][j] * vec[j];
+            }
         }
+
+        return result;
+    }
+
+        // Matrix<T> mul_mat(Matrix<T> other)
+        // {
+
+        // }
 
         // Output
         friend std::ostream& operator<<(std::ostream& os, const Matrix<T, Rows, Cols>& mat) {

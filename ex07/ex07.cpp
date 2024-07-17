@@ -12,22 +12,6 @@
 /*
 
 let u = Matrix::from([
-[2., 0.],
-[0., 2.],
-]);
-let v = Vector::from([4., 2.]);
-println!("{}", u.mul_vec(&v));
-// [8.]
-// [4.]
-let u = Matrix::from([
-[2., -2.],
-[-2., 2.],
-]);
-let v = Vector::from([4., 2.]);
-println!("{}", u.mul_vec(&v));
-// [4.]
-// [-4.]
-let u = Matrix::from([
 [1., 0.],
 [0., 1.],
 ]);
@@ -74,12 +58,19 @@ int main()
     std::cout << u.mul_vec(v)  << std::endl;
 
 
-    u = {{2.0, 0.0}, {0.0, 1.0}};
-    v = {8.0, 4.0};
+    u[0] = {2.0, 0.0};
+    u[1] = {0.0, 2.0};
+    v = {4.0, 2.0};
     std::cout << FCYN("Expected Output: ") << std::endl;
     std::cout << FCYN("[8.0]    [4.0]") << std::endl;
-    std::cout <<u.mul_vec(v) << std::endl;
+    std::cout << u.mul_vec(v) << std::endl;
 
+    u[0] = {2.0, -2.0};
+    u[1] = {-2.0, 2.0};
+    v = {4.0, 2.0};
+    std::cout << FCYN("Expected Output: ") << std::endl;
+    std::cout << FCYN("[4.0]    [-4.0]") << std::endl;
+    std::cout << u.mul_vec(v) << std::endl;
 
     return 0;
 }
