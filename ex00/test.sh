@@ -71,15 +71,14 @@ for expected in "${expected_outputs[@]}"; do
     # Compare each test block individually
     expected=$(echo "$expected" | tr -d '\r')
     actual=$(echo "${actual_outputs[@]}" | tr -d '\r')
-    
+    print_color "yellow" "Expected:"
+    echo "$expected"
+    print_color "yellow" "Got:"
+    echo "$actual"
     if [[ "$actual" == *"$expected"* ]]; then
         print_color "green" "Test $test_counter passed!"
     else
         print_color "red" "Test $test_counter failed!"
-        print_color "yellow" "Expected:"
-        echo "$expected"
-        print_color "yellow" "Got:"
-        echo "$actual"
         all_tests_passed=false
     fi
     ((test_counter++))

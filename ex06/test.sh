@@ -60,6 +60,10 @@ for expected in "${expected_outputs[@]}"; do
     actual=$(echo "${actual_outputs[@]}" | tr -d '\r')
     
     if [[ "$actual" == *"$expected"* ]]; then
+        print_color "yellow" "Expected:"
+        echo "$expected"
+        print_color "yellow" "Got:"
+        echo "$actual"
         print_color "green" "Test $test_counter passed!"
     else
         print_color "red" "Test $test_counter failed!"

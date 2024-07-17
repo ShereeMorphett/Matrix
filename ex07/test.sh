@@ -61,6 +61,10 @@ for i in "${!expected_outputs[@]}"; do
     test_num=$((i+1))
 
     if [ "$actual" == "$expected" ]; then
+        print_color "yellow" "Expected:"
+        echo "$expected"
+        print_color "yellow" "Got:"
+        echo "$actual"
         print_color "green" "Test $test_num passed!"
     else
         print_color "red" "Test $test_num failed!"
