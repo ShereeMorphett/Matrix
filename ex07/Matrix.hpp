@@ -18,18 +18,12 @@ class Matrix
         static const int rows = Rows;
         static const int cols = Cols;
     
-    // Constructor to initialize matrix with initializer list
+        // // Constructor to initialize matrix with initializer list
         Matrix(std::initializer_list<std::initializer_list<T>> init)
         {
-            if (init.size() != Rows)
-                throw std::invalid_argument("Matrix dimensions do not match.");
-
             auto row_it = init.begin();
             for (int i = 0; i < Rows; ++i, ++row_it)
             {
-                if (row_it->size() != Cols)
-                    throw std::invalid_argument("Matrix dimensions do not match.");
-
                 components[i] = row_vector();  // Initialize an empty row_vector
                 auto col_it = row_it->begin();
                 for (int j = 0; j < Cols; ++j, ++col_it)
@@ -39,6 +33,17 @@ class Matrix
             }
         }
 
+        Matrix()
+        {
+            // Initialize components to default values, for example:
+            for (int i = 0; i < Rows; ++i)
+            {
+                for (int j = 0; j < Cols; ++j)
+                {
+                    components[i][j] = T(); // default-initialize elements
+                }
+            }
+        }
 
         Vector<T, Cols>& operator[](int index)
         {
@@ -105,26 +110,14 @@ class Matrix
             return Rows == Cols;
         }
 
-    // // Matrix-vector multiplication
-    // Vector<T, Rows> mul_vec(const Vector<T, Cols>& vec) const
-    // {
-    //     Vector<T, Rows> result;  // Initialize result vector with zeros
-    //     for (int i = 0; i < Rows; ++i)
-    //     {
-    //         for (int j = 0; j < Cols; ++j)
-    //         {
-    //             result[i] += components[i][j] * vec[j];
-    //         }
-    //     }
-    //     return result;
-    // }
-        // Matrix-vector multiplication
+  
+    // Matrix-vector multiplication
     Vector<T, Rows> mul_vec(const Vector<T, Cols>& vec) const
     {
-        Vector<T, Rows> result;  // Initialize result vector
-        for (int i = 0; i < Rows; ++i)
+        Vector<T, this->rows> result = {};  // Initialize result vector
+        for (int i = 0; i < this->rows; ++i)
         {
-            for (int j = 0; j < Cols; ++j)
+            for (int j = 0; j < this->cols; ++j)
             {
                 result[i] += components[i][j] * vec[j];
             }
@@ -132,12 +125,28 @@ class Matrix
         return result;
     }
 
-        // Matrix<T> mul_mat(Matrix<T> other)
-        // {
+    Matrix<T, Rows, Cols> mul_mat(Matrix<T, Rows, Cols>& mat)
+    {
+        
+        Matrix<T, this->rows, this->cols> result; // initialize result matrix with dimensions n x p
+        
+        for (int index = 0; index < this->rows; ++index)
+        {
+            for (int j = 0; j < mat.cols; ++j)
+            {
+                T sum = 0;
+                for (int k = 0; k < this->cols; ++k)
+                {
+                    sum += this->components[index][k] * mat.components[k][j]; // multiply corresponding elements
+                }
+                result.components[index][j] = sum;
+            }
+        }
+        
+        return result;
+    }
 
-        // }
 
-        // Output
         friend std::ostream& operator<<(std::ostream& os, const Matrix<T, Rows, Cols>& mat) {
             for (int i = 0; i < Rows; ++i) {
                 os << "[ ";
