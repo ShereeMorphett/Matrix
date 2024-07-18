@@ -1,24 +1,36 @@
+#pragma once
 #include <iostream>
 #include <array>
 #include <stdexcept>
 #include <utility>
+#include "Vector.hpp"
+
+
+
+
 
 template <typename T, int Rows, int Cols>
 class Matrix
 {
     public:
-        std::array<std::array<T, Cols>, Rows> components;
-        const int rows = Rows;
-        const int cols = Cols;
-
-
+        using row_vector = Vector<T, Cols>;
+        std::array<row_vector, Rows> components;
+        static const int rows = Rows;
+        static const int cols = Cols;
+    
+    // Constructor to initialize matrix with initializer list
         Matrix(std::initializer_list<std::initializer_list<T>> init)
         {
-            if (init.size() != Rows || (init.size() > 0 && init.begin()->size() != Cols))
+            if (init.size() != Rows)
                 throw std::invalid_argument("Matrix dimensions do not match.");
+
             auto row_it = init.begin();
             for (int i = 0; i < Rows; ++i, ++row_it)
             {
+                if (row_it->size() != Cols)
+                    throw std::invalid_argument("Matrix dimensions do not match.");
+
+                components[i] = row_vector();  // Initialize an empty row_vector
                 auto col_it = row_it->begin();
                 for (int j = 0; j < Cols; ++j, ++col_it)
                 {
@@ -26,7 +38,9 @@ class Matrix
                 }
             }
         }
-        std::array<T, Cols>& operator[](int index)
+
+
+        Vector<T, Cols>& operator[](int index)
         {
             return components[index];
         }
@@ -91,19 +105,30 @@ class Matrix
             return Rows == Cols;
         }
 
-    Vector<T> mul_vec(const Vector<T>& vec) const
+    // // Matrix-vector multiplication
+    // Vector<T, Rows> mul_vec(const Vector<T, Cols>& vec) const
+    // {
+    //     Vector<T, Rows> result;  // Initialize result vector with zeros
+    //     for (int i = 0; i < Rows; ++i)
+    //     {
+    //         for (int j = 0; j < Cols; ++j)
+    //         {
+    //             result[i] += components[i][j] * vec[j];
+    //         }
+    //     }
+    //     return result;
+    // }
+        // Matrix-vector multiplication
+    Vector<T, Rows> mul_vec(const Vector<T, Cols>& vec) const
     {
-        if (Cols != vec.size()) {
-            throw std::invalid_argument("Matrix columns must match vector size for multiplication.");
-        }
-
-        Vector<T> result(std::vector<T>(Rows, 0));  // Initialize result vector with zeros
-        for (int i = 0; i < Rows; ++i) {
-            for (int j = 0; j < Cols; ++j) {
+        Vector<T, Rows> result;  // Initialize result vector
+        for (int i = 0; i < Rows; ++i)
+        {
+            for (int j = 0; j < Cols; ++j)
+            {
                 result[i] += components[i][j] * vec[j];
             }
         }
-
         return result;
     }
 

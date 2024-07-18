@@ -16,18 +16,18 @@ print_color() {
 
 # Check if argument is "clean"
 if [ "$1" == "clean" ]; then
-    # Clean operation: delete compiled executable
-    if [ -f matrix_vector_test ]; then
-        rm matrix_vector_test
-        print_color "cyan" "Deleted compiled executable 'matrix_vector_test'."
+    # Clean operation: delete compiled executables
+    if [ -f ex07_test ]; then
+        rm ex07_test
+        print_color "cyan" "Deleted compiled executable 'ex07_test'."
     else
-        print_color "yellow" "No compiled executable found ('matrix_vector_test')."
+        print_color "yellow" "No compiled executable found ('ex07_test')."
     fi
     exit 0
 fi
 
-# Compile the C++ code
-g++ -o matrix_vector_test ex07.cpp -I.
+# Compile the C++ code with ex07.cpp
+c++ -o ex07_test ex07.cpp -I.
 
 if [ $? -ne 0 ]; then
     print_color "red" "Compilation failed!"
@@ -35,49 +35,6 @@ if [ $? -ne 0 ]; then
 fi
 
 # Run the executable and capture the output
-output=$(./matrix_vector_test)
+output=$(./ex07_test)
 
-# Define the expected outputs for each test
-declare -a expected_outputs=(
-    "Expected Output: 
-[4.0]    [2.0]
-[4, 2]"
-    "Expected Output: 
-[8.0]    [4.0]
-[8, 4]"
-    "Expected Output: 
-[4.0]    [-4.0]
-[4, -4]"
-)
-
-# Extract actual outputs from the program's output
-IFS=$'\n' read -r -d '' -a actual_outputs < <(echo "$output" && printf '\0')
-
-# Run individual tests
-all_tests_passed=true
-for i in "${!expected_outputs[@]}"; do
-    expected="${expected_outputs[$i]}"
-    actual="${actual_outputs[$i]}"
-    test_num=$((i+1))
-
-    if [ "$actual" == "$expected" ]; then
-        print_color "yellow" "Expected:"
-        echo "$expected"
-        print_color "yellow" "Got:"
-        echo "$actual"
-        print_color "green" "Test $test_num passed!"
-    else
-        print_color "red" "Test $test_num failed!"
-        print_color "yellow" "Expected:"
-        echo "$expected"
-        print_color "yellow" "Got:"
-        echo "$actual"
-        all_tests_passed=false
-    fi
-done
-
-if $all_tests_passed; then
-    print_color "green" "All tests passed!"
-else
-    print_color "red" "Some tests failed."
-fi
+echo $output

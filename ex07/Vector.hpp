@@ -1,104 +1,142 @@
 #pragma once
 
 #include <iostream>
-#include <vector>
+#include <array>
 #include <sstream>
 #include <limits>
 #include <cmath>
 #include <cassert>
 
 
-template <typename T>
-struct Vector
+template <typename T, size_t Size>
+struct VectorStorage
 {
-    std::vector<T> components;
+    std::array<T, Size> components;
 
-    Vector(const std::vector<T>& v) : components(v) {};
-    Vector() {}
+    VectorStorage() = default;
+    VectorStorage(const VectorStorage&) = default;
+    VectorStorage& operator=(const VectorStorage&) = default;
+};
 
-    // Constructor to initialize from individual components
-    Vector(std::initializer_list<T> init) : components(init) {}
+template <typename T, size_t Size>
+struct VectorInit;
+
+template <typename T>
+struct VectorInit<T, 2> : public VectorStorage<T, 2>
+{
+    VectorInit() = default;
+    VectorInit(const VectorInit&) = default;
+    VectorInit& operator=(const VectorInit&) = default;
+
+    using base = VectorStorage<T, 2>;
+
+    VectorInit(T x, T y)
+     : base{ {{ x, y }} }
+    {}
+};
+
+template <typename T>
+struct VectorInit<T, 3> : public VectorStorage<T, 3>
+{
+    VectorInit() = default;
+    VectorInit(const VectorInit&) = default;
+    VectorInit& operator=(const VectorInit&) = default;
+
+    using base = VectorInit<T, 3>;
+
+    VectorInit(T x, T y, T z)
+     : base{ {{ x, y, z }} }
+    {}
+};
+
+template <typename T>
+struct VectorInit<T, 4> : public VectorStorage<T, 4>
+{
+    VectorInit() = default;
+    VectorInit(const VectorInit&) = default;
+    VectorInit& operator=(const VectorInit&) = default;
+
+    using base = VectorInit<T, 4>;
+
+    VectorInit(T x, T y, T z, T w)
+     : base{ {{ x, y, z, w }} }
+    {}
+
+};
+
+template <typename T, size_t Size>
+struct Vector : public VectorInit<T, Size>
+{
+    Vector() = default;
+    Vector(const Vector&) = default;
+    Vector& operator=(const Vector&) = default;
+
+    using base = VectorInit<T, Size>;
+    using base::base;
 
     size_t size() const
     {
-        return components.size();
+        return Size;
     }
 
     T& operator[](size_t index)
     {
-        return components[index];
+        return base::components[index];
     }
 
     const T& operator[](size_t index) const
     {
-        return components[index];
+        return base::components[index];
     }
 
-    Vector operator+(const Vector& rhs) const
+    //CHANGE LOTS
+    Vector<T, Size> operator+(const Vector& rhs) const
     {
-        if (size() != rhs.size())
-            throw std::invalid_argument("Vector addition requires vectors of the same size.");
-
-        Vector result;
-        result.components.reserve(size());
+        Vector<T, Size> result;
         for (size_t i = 0; i < size(); ++i)
         {
-            result.components.push_back(components[i] + rhs.components[i]);
+            result[i] = (*this)[i] + rhs[i];
         }
         return result;
     }
     
-    Vector operator-(const Vector& rhs) const
+    Vector<T, Size> operator-(const Vector& rhs) const
     {
-        if (size() != rhs.size())
-            throw std::invalid_argument("Vector addition requires vectors of the same size.");
-    
-        Vector result;
-        result.components.reserve(size());
+        Vector<T, Size> result;
         for (size_t i = 0; i < size(); ++i)
         {
-            result.components.push_back(components[i] - rhs.components[i]);
+            result[i] = (*this)[i] - rhs[i];
         }
-
         return result;
     }
 
-    Vector operator*(const T scalar) const
+    Vector<T, Size> operator*(const Vector& rhs) const
     {
-        Vector result;
-        result.components.reserve(size());
+        Vector<T, Size> result;
         for (size_t i = 0; i < size(); ++i)
         {
-            result.components.push_back(components[i] * scalar);
+            result[i] = (*this)[i] * rhs[i];
         }
-
         return result;
     }
     
     
-    T dot(Vector const & b) const
+    T dot(const Vector<T, Size>& b) const
     {
-        if (components.size() != b.size())
+        T result = T();
+        for (size_t i = 0; i < size(); ++i)
         {
-            throw std::invalid_argument("Vectors must be of the same size");
+            result += (*this)[i] * b[i];
         }
-
-        T result;
-
-        for (size_t i = 0; i < b.size(); ++i)
-        {
-            result += components[i] * b[i];
-        }
-
         return result;
     }
 
 
     T norm_one() const
     {
-        T result = 0;
+        T result = T();
 
-        for (auto i : components)
+        for (auto i : base::components)
         {
             result += std::abs(i);
         }
@@ -109,9 +147,9 @@ struct Vector
 
     T norm() const
     {
-        T result = 0;
+        T result = T();
 
-        for (auto i : components)
+        for (auto i : base::components)
         {
             result += i * i;
         }
@@ -123,14 +161,14 @@ struct Vector
     T norm_inf() const
     {
 
-        if (components.empty())
+        if (base::components.empty())
         {
             return 0.0;
         }
 
-        T max_val = std::abs(components[0]);
+        T max_val = std::abs(base::components[0]);
 
-        for (const auto& el : components)
+        for (const auto& el : base::components)
         {
             if (std::abs(el) > max_val)
                 max_val = std::abs(el);
@@ -149,30 +187,26 @@ T lerp_single(T const & u, T const & v, float t)
 }
 
 template<typename T>
-Vector<T> cross_product(Vector<T> & v, Vector<T> & u)
+Vector<T, 3> cross_product(const Vector<T, 3>& v, const Vector<T, 3>& u)
 {
-    if (v.size() != 3 || u.size() != 3)
-        throw std::invalid_argument("Cross product is defined only for 3-dimensional vectors");
-
-    Vector<T> result = {0.0, 0.0, 0.0} ;
-
+    Vector<T, 3> result;
     result[0] = v[1] * u[2] - v[2] * u[1];
     result[1] = v[2] * u[0] - v[0] * u[2];
     result[2] = v[0] * u[1] - v[1] * u[0];
-    
     return result;
 }
 
 
-
 template <typename VecType>
-VecType lerp( VecType const & u, VecType  const & v, float t) {
+VecType lerp( VecType const & u, VecType  const & v, float t)
+{
     if (u.size() != v.size()) {
         throw std::invalid_argument("Vectors must be of the same size");
     }
 
     VecType result;
-    for (size_t i = 0; i < u.size(); ++i) {
+    for (size_t i = 0; i < u.size(); ++i)
+    {
         result[i] = lerp_single(u[i], v[i], t);
     }
 
@@ -183,8 +217,8 @@ VecType lerp( VecType const & u, VecType  const & v, float t) {
 // Method to compute the cosine of the angle between two vectors
 // The cosine of the angle between two vectors 
 // u and v can be found using the dot product and the magnitudes (norms) of the vectors
-template <typename T>
-T angle_cos(const Vector<T>& u, const Vector<T>& v)
+template <typename T, size_t Size>
+T angle_cos(const Vector<T, Size>& u, const Vector<T, Size>& v)
 {
     T dot_product = u.dot(v);
     T norm_product = u.norm() * v.norm();
@@ -192,9 +226,8 @@ T angle_cos(const Vector<T>& u, const Vector<T>& v)
     return dot_product / norm_product;
 }
 
-
-template <typename T>
-std::ostream& operator<<(std::ostream & os, Vector<T> const & vec)
+template <typename T, size_t Size>
+std::ostream& operator<<(std::ostream & os, Vector<T, Size> const & vec)
 {
     os << "[ ";
     for (size_t i = 0; i < vec.size(); ++i) {

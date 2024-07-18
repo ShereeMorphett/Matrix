@@ -9,8 +9,37 @@
 #include <stdexcept>
 #include <iostream>
 
-/*
 
+
+
+
+int main()
+{
+    Matrix<float, 2, 2> u = {{1.0, 0.0}, {0.0, 1.0}};
+    Vector<float, 2> v = {4.0, 2.0};
+
+    std::cout << FCYN("Expected Output: ") << std::endl;
+    std::cout << FCYN("[4.0]    [2.0]") << std::endl;
+    Vector<float, 2> result = u.mul_vec(v);
+    std::cout << result  << std::endl;
+
+    u = {{2.0, 0.0}, {0.0, 2.0}};
+    std::cout << FCYN("Expected Output: ") << std::endl;
+    std::cout << FCYN("[8.0]    [4.0]") << std::endl;
+    result = u.mul_vec(v);
+    std::cout << result  << std::endl;
+
+    u = {{2.0, -2.0}, {-2.0, 2.0}};
+    std::cout << FCYN("Expected Output: ") << std::endl;
+    std::cout << FCYN("[4.0]    [-4.0]") << std::endl;
+    result = u.mul_vec(v);
+    std::cout << result  << std::endl;
+
+    // u = {{1.0, 0.0}, {0.0, 1.0}};
+    // u[0] = {2.0, 0.0};
+    // u[1] = {0.0, 2.0};
+
+/*
 let u = Matrix::from([
 [1., 0.],
 [0., 1.],
@@ -44,33 +73,6 @@ let v = Matrix::from([
 [4., 2.],
 ])
 */
-
-
-
-
-int main()
-{
-    Matrix<float, 2, 2> u = {{1.0, 0.0}, {0.0, 1.0}};
-    Vector<float> v = {4.0, 2.0};
-
-    std::cout << FCYN("Expected Output: ") << std::endl;
-    std::cout << FCYN("[4.0]    [2.0]") << std::endl;
-    std::cout << u.mul_vec(v)  << std::endl;
-
-
-    u[0] = {2.0, 0.0};
-    u[1] = {0.0, 2.0};
-    v = {4.0, 2.0};
-    std::cout << FCYN("Expected Output: ") << std::endl;
-    std::cout << FCYN("[8.0]    [4.0]") << std::endl;
-    std::cout << u.mul_vec(v) << std::endl;
-
-    u[0] = {2.0, -2.0};
-    u[1] = {-2.0, 2.0};
-    v = {4.0, 2.0};
-    std::cout << FCYN("Expected Output: ") << std::endl;
-    std::cout << FCYN("[4.0]    [-4.0]") << std::endl;
-    std::cout << u.mul_vec(v) << std::endl;
 
     return 0;
 }
