@@ -13,10 +13,8 @@
 */
 
 
-
 int main()
 {
-    {
         std::cout << FMAG("Testing trace") << std::endl;
         {
             Matrix<float, 2, 2> u = {{1.0, 0.0}, {0.0, 1.0}};
@@ -26,6 +24,7 @@ int main()
             float result = u.trace();
             std::cout << result << std::endl;
             std::cout << std::endl;
+        }
 
         Matrix<float, 3, 3> u = {{2.0, -5.0, 0.0}, {4.0, 3.0, 7.0}, {-2.0, 3.0, 4.0}};
         std::cout << FCYN("Expected Output: ") << std::endl;
@@ -38,9 +37,6 @@ int main()
         std::cout << FCYN("-21.0") << std::endl;
         std::cout << u.trace() << std::endl;
         std::cout << std::endl;
-    }
-   
-
 
     return 0;
 }
