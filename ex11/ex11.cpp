@@ -8,18 +8,7 @@
 
 
 /*
-    You must write a function that computes the row-echelon form of the given matrix.
-    Let A ∈ Km×n, where K is the real numbers (represented as the type f32) and (m, n) ∈ N2
-    (represented as two values of type u32).
-     row_echelon::<K>(&mut self) -> Matrix::<K>;
 
-    Gaussian elimination to transform the given matrix into its row echelon form
-
-    Pivoting: Ensure that the leading coefficient (pivot) in each row is 1. 
-            If it's not, swap rows or scale the row to make it so.
-    Elimination: Use the pivot to eliminate the entries below it,
-            ensuring that each subsequent row has zeros below the pivot.
-    Handling Zero Rows: Any rows that are entirely zero should be moved to the bottom.
 
 */
 
