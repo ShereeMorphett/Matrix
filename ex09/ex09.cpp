@@ -46,20 +46,13 @@ int main()
             std::cout << v << std::endl;
         }
 
-        Matrix<float, 3, 3> u = {{1, 1, 1, 1}, {2, 2, 2, 2}, {3, 3, 3, 3}};
+        Matrix<float, 3, 3> u = {{1, 1, 1}, {2, 2, 2}, {3, 3, 3}};
         std::cout << u << std::endl;
         Matrix<float, 3, 3> v = u.transpose();
         std::cout << v << std::endl;
-        // std::cout << FCYN("Expected Output: ") << std::endl;
-        // std::cout << FCYN("9.0") << std::endl;
-        // std::cout << u.trace() << std::endl;
         std::cout << std::endl;
 
-        // u = {{-2.0, -8.0, 4.0}, {1.0, -23.0, 4.0}, {0.0, 6.0, 4.0}};
-        // std::cout << FCYN("Expected Output: ") << std::endl;
-        // std::cout << FCYN("-21.0") << std::endl;
-        // std::cout << u.trace() << std::endl;
-        // std::cout << std::endl;
+
 
     return 0;
 }
