@@ -245,34 +245,6 @@ class Matrix : public MatrixInit<T, Rows, Cols>
         return new_mat;
     }
 
-// void RowReduce(float A[][4])
-// {
-//     const int nrows = 3; // number of rows
-//     const int ncols = 4; // number of columns
-
-//     int lead = 0; 
-
-//     while (lead < nrows) {
-//         float d, m;
-
-//         for (int r = 0; r < nrows; r++) { // for each row ...
-// calculate divisor and multiplier
-//             d = A[lead][lead];
-//             m = A[r][lead] / A[lead][lead];
-
-//             for (int c = 0; c < ncols; c++) { // for each column ...
-//                 if (r == lead)
-//                     A[r][c] /= d;               // make pivot = 1
-//                 else
-//                     A[r][c] -= A[lead][c] * m;  // make other = 0
-//             }
-//         }
-
-//         lead++;
-//         printmatrix(A);
-//     }
-// }
-
 
     Matrix<T, Rows, Cols> row_echelon() const
     {
@@ -328,7 +300,6 @@ class Matrix : public MatrixInit<T, Rows, Cols>
 
             lead++;
         }
-
         // Handle zero rows (move zero rows to the bottom)
         size_t non_zero_row = Rows - 1;
         for (size_t r = Rows - 1; r >= 0; --r)

@@ -245,6 +245,7 @@ class Matrix : public MatrixInit<T, Rows, Cols>
         return new_mat;
     }
 
+
     T determinant()
     {
         if (!isSquareMatrix())
@@ -261,7 +262,6 @@ class Matrix : public MatrixInit<T, Rows, Cols>
                 if (std::abs(temp[j][i]) > std::abs(temp[pivot][i]))
                     pivot = j;
             }
-
             // If a pivot row different from the current row is found, swap rows
             //  and multiply determinant by -1
             if (pivot != i)
@@ -290,7 +290,6 @@ class Matrix : public MatrixInit<T, Rows, Cols>
         }
         return det;
     }
-
 
     Matrix<T, Rows, Cols> row_echelon() const
     {
