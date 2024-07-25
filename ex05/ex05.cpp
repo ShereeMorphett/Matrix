@@ -11,7 +11,6 @@
 
     Implement the cosine angle function using the dot product and norms of the vectors.
 
-
 */
 
 

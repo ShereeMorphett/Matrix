@@ -112,26 +112,364 @@ TEST_CASE("Vector linear combination")
 constexpr float tolerance = 1e-6;
 
 // Custom assertion for floating-point comparison
-bool areClose(float a, float b, float tol) {
+bool are_close(float a, float b, float tol)
+{
     return std::fabs(a - b) < tol;
 }
 
 TEST_CASE("Vector dot product") {
     // Initialize vectors
-    Vector<float, 3> u({1.0f, 2.0f, 3.0f});
-    Vector<float, 3> v({4.0f, 5.0f, 6.0f});
-    
+    Vector<float, 2> u({0.0f, 0.0f});
+    Vector<float, 2> v({1.0f, 1.0f});
+
     // Expected result of the dot product
-    float expected_result = 1.0f * 4.0f + 2.0f * 5.0f + 3.0f * 6.0f;
     
-    SECTION("Computing dot product") {
+    float expected_result = 0.0f;
+    
+    SECTION("Computing dot product")
+    {
         // Compute the dot product
-        float result = u.dot(v);
-        
-        INFO("Expected result: " << expected_result);
-        INFO("Actual result: " << result);
-        
-        // Check if the computed result matches the expected result within tolerance
-        REQUIRE(areClose(result, expected_result, tolerance));
+        { 
+            auto result = u.dot(v);
+            INFO("Expected result: " << expected_result);
+            INFO("Actual result: " << result);        
+            REQUIRE(are_close(result, expected_result, tolerance));
+        }
+
+        {
+            u = {1.0f, 1.0f};
+            v = {1.0f, 1.0f};
+            auto result = u.dot(v);
+            expected_result = 2.0f;
+            INFO("Expected result: " << expected_result);
+            INFO("Actual result: " << result);        
+            REQUIRE(are_close(result, expected_result, tolerance));
+        }
+        {
+            u = {-1.0f, 6.0f};
+            v = {3.0f, 2.0f};
+            auto result = u.dot(v);
+            expected_result = 9.0f;
+            INFO("Expected result: " << expected_result);
+            INFO("Actual result: " << result);        
+            REQUIRE(are_close(result, expected_result, tolerance));
+        }
     }
 }
+
+    /////EX04///////
+
+    TEST_CASE("Vector norms")
+    {
+        Vector<float, 3> u = {0.0, 0.0, 0.0};
+        Vector<float, 3> v = {1.0, 2.0, 3.0};
+        Vector<float, 2> w = {-1.0, -2.0};
+
+        SECTION("Manhattan norm (L1 norm)") {
+            REQUIRE(are_close(u.norm_one(), 0.0, tolerance));
+
+            REQUIRE(are_close(v.norm_one(), 6.0, tolerance));
+
+            REQUIRE(are_close(w.norm_one(), 3.0, tolerance));
+        }
+
+        SECTION("Euclidean norm (L2 norm)") {
+            REQUIRE(are_close(u.norm(), 0.0, tolerance));
+            REQUIRE(are_close(v.norm(), 3.74165738, tolerance));
+            REQUIRE(are_close(w.norm(), 2.236067977, tolerance));
+        }
+
+        SECTION("Supremum norm (L∞ norm)") {
+            REQUIRE(are_close(u.norm_inf(), 0.0, tolerance));
+            REQUIRE(are_close(v.norm_inf(), 3.0, tolerance));
+            REQUIRE(are_close(w.norm_inf(), 2.0, tolerance));
+            
+        }
+    }
+
+    /////EX05///////
+
+    TEST_CASE("Vector angle cosine") {
+        Vector<float, 2> u, v;
+        Vector<float, 3> a, b;
+
+        SECTION("Case 1") {
+            u = {1.0, 0.0};
+            v = {1.0, 0.0};
+            REQUIRE(are_close(angle_cos(u, v), 1.0, 0.01));
+        }
+
+        SECTION("Case 2") {
+            u = {-1.0, 1.0};
+            v = {1.0, 1.0};
+            REQUIRE(are_close(angle_cos(u, v), 0.0, 0.01));
+        }
+
+        SECTION("Case 3") {
+            u = {-1.0, 1.0};
+            v = {1.0, -1.0};
+            REQUIRE(are_close(angle_cos(u, v), -1.0, 0.01));
+        }
+
+        SECTION("Case 4") {
+            u = {2.0, 1.0};
+            v = {4.0, 2.0};
+            REQUIRE(are_close(angle_cos(u, v), 1.0, 0.01));
+        }
+
+        SECTION("Case 5") {
+            a = {1.0, 2.0, 3.0};
+            b = {4.0, 5.0, 6.0};
+            REQUIRE(are_close(angle_cos(a, b), 0.974631846, 0.01));
+        }
+    }
+
+    /////EX06///////
+
+    TEST_CASE("Vector cross product")
+    {
+        Vector<float, 3> u, v;
+
+        SECTION("Case 1") {
+            u = {0.0, 0.0, 1.0};
+            v = {1.0, 0.0, 0.0};
+            Vector<float, 3> result = cross_product(u, v);
+            REQUIRE(are_close(result[0], 0.0, 0.01));
+            REQUIRE(are_close(result[1], 1.0, 0.01));
+            REQUIRE(are_close(result[2], 0.0, 0.01));
+        }
+
+        SECTION("Case 2") {
+            u = {1.0, 2.0, 3.0};
+            v = {4.0, 5.0, 6.0};
+            Vector<float, 3> result = cross_product(u, v);
+            REQUIRE(are_close(result[0], -3.0, 0.01));
+            REQUIRE(are_close(result[1], 6.0, 0.01));
+            REQUIRE(are_close(result[2], -3.0, 0.01));
+        }
+
+        SECTION("Case 3") {
+            u = {4.0, 2.0, -3.0};
+            v = {-2.0, -5.0, 16.0};
+            Vector<float, 3> result = cross_product(u, v);
+            REQUIRE(are_close(result[0], 17.0, 0.01));
+            REQUIRE(are_close(result[1], -58.0, 0.01));
+            REQUIRE(are_close(result[2], -16.0, 0.01));
+        }
+    }
+
+    /////EX07///////
+
+    TEST_CASE("Matrix-vector multiplication") {
+        Matrix<float, 2, 2> u;
+        Vector<float, 2> v, result;
+
+        SECTION("Case 1") {
+            u = {{1.0, 0.0}, {0.0, 1.0}};
+            v = {4.0, 2.0};
+            result = u.mul_vec(v);
+            REQUIRE(are_close(result[0], 4.0, 0.01));
+            REQUIRE(are_close(result[1], 2.0, 0.01));
+        }
+
+        SECTION("Case 2") {
+            u = {{2.0, 0.0}, {0.0, 2.0}};
+            v = {4.0, 2.0};
+            result = u.mul_vec(v);
+            REQUIRE(are_close(result[0], 8.0, 0.01));
+            REQUIRE(are_close(result[1], 4.0, 0.01));
+        }
+
+        SECTION("Case 3") {
+            u = {{2.0, -2.0}, {-2.0, 2.0}};
+            v = {4.0, 2.0};
+            result = u.mul_vec(v);
+            REQUIRE(are_close(result[0], 4.0, 0.01));
+            REQUIRE(are_close(result[1], -4.0, 0.01));
+        }
+    }
+
+    TEST_CASE("Matrix-matrix multiplication") {
+        Matrix<float, 2, 2> u, v, result;
+
+        SECTION("Case 1") {
+            u = {{1.0, 0.0}, {0.0, 1.0}};
+            v = {{1.0, 0.0}, {0.0, 1.0}};
+            result = u.mul_mat(v);  
+            REQUIRE(are_close(result[0][0], 1.0, 0.01));
+            REQUIRE(are_close(result[0][1], 0.0, 0.01));
+            REQUIRE(are_close(result[1][0], 0.0, 0.01));
+            REQUIRE(are_close(result[1][1], 1.0, 0.01));
+        }
+
+        SECTION("Case 2") {
+            u = {{1.0, 0.0}, {0.0, 1.0}};
+            v = {{2.0, 1.0}, {4.0, 2.0}};
+            result = u.mul_mat(v);
+ 
+            REQUIRE(are_close(result[0][0], 2.0, 0.01));
+            REQUIRE(are_close(result[0][1], 1.0, 0.01));
+            REQUIRE(are_close(result[1][0], 4.0, 0.01));
+            REQUIRE(are_close(result[1][1], 2.0, 0.01));
+        }
+
+        SECTION("Case 3") {
+            u = {{3.0, -5.0}, {6.0, 8.0}};
+            v = {{2.0, 1.0}, {4.0, 2.0}};
+            result = u.mul_mat(v);
+            REQUIRE(are_close(result[0][0], -14.0, 0.01));
+            REQUIRE(are_close(result[0][1], -7.0, 0.01));
+            REQUIRE(are_close(result[1][0], 44.0, 0.01));
+            REQUIRE(are_close(result[1][1], 22.0, 0.01));
+        }
+    }
+
+
+    /////EX08///////
+
+    TEST_CASE("Matrix trace calculation")
+    {
+        SECTION("2x2 Matrix Trace") {
+            Matrix<float, 2, 2> u = {{1.0, 0.0}, {0.0, 1.0}};
+            float result = u.trace();
+            REQUIRE(are_close(result, 2.0, 0.01));
+        }
+
+        SECTION("3x3 Matrix Trace - Case 1") {
+            Matrix<float, 3, 3> u = {{2.0, -5.0, 0.0}, {4.0, 3.0, 7.0}, {-2.0, 3.0, 4.0}};
+            float result = u.trace();
+            REQUIRE(are_close(result, 9.0, 0.01));
+        }
+
+        SECTION("3x3 Matrix Trace - Case 2") {
+            Matrix<float, 3, 3> u = {{-2.0, -8.0, 4.0}, {1.0, -23.0, 4.0}, {0.0, 6.0, 4.0}};
+            float result = u.trace();
+            REQUIRE(are_close(result, -21.0, 0.01));
+        }
+    }
+
+    /////EX09///////
+
+    TEST_CASE("Matrix transpose calculation")
+    {
+        SECTION("2x2 Matrix Transpose") {
+            Matrix<float, 2, 2> u = {{1.0, 0.0}, {0.0, 1.0}};
+            Matrix<float, 2, 2> v = u.transpose();
+            REQUIRE(are_close(v[0][0], 1.0, 0.01));
+            REQUIRE(are_close(v[0][1], 0.0, 0.01));
+            REQUIRE(are_close(v[1][0], 0.0, 0.01));
+            REQUIRE(are_close(v[1][1], 1.0, 0.01));
+        }
+
+        SECTION("3x3 Matrix Transpose - Case 1") {
+            Matrix<float, 3, 3> u = {{1.0, 1.0, 1.0}, {2.0, 2.0, 2.0}, {3.0, 3.0, 3.0}};
+            Matrix<float, 3, 3> v = u.transpose();
+            REQUIRE(are_close(v[0][0], 1.0, 0.01));
+            REQUIRE(are_close(v[0][1], 2.0, 0.01));
+            REQUIRE(are_close(v[0][2], 3.0, 0.01));
+            REQUIRE(are_close(v[1][0], 1.0, 0.01));
+            REQUIRE(are_close(v[1][1], 2.0, 0.01));
+            REQUIRE(are_close(v[1][2], 3.0, 0.01));
+            REQUIRE(are_close(v[2][0], 1.0, 0.01));
+            REQUIRE(are_close(v[2][1], 2.0, 0.01));
+            REQUIRE(are_close(v[2][2], 3.0, 0.01));
+        }   
+    }
+
+    /////EX11///////
+    TEST_CASE("Matrix determinant calculation")
+    {
+        SECTION("2x2 Matrix Determinant") {
+            Matrix<float, 2, 2> u = {{1.0, -1.0}, {-1.0, 1.0}};
+            float det = u.determinant();
+            REQUIRE(are_close(det, 0.0, 0.01));
+        }
+
+        SECTION("3x3 Diagonal Matrix Determinant") {
+            Matrix<float, 3, 3> u = {{2.0, 0.0, 0.0}, {0.0, 2.0, 0.0}, {0.0, 0.0, 2.0}};
+            float det = u.determinant();
+            REQUIRE(are_close(det, 8.0, 0.01));
+        }
+
+        SECTION("3x3 General Matrix Determinant") {
+            Matrix<float, 3, 3> u = {{8.0, 5.0, -2.0}, {4.0, 7.0, 20.0}, {7.0, 6.0, 1.0}};
+            float det = u.determinant();
+            REQUIRE(are_close(det, -174.0, 0.01));
+        }
+
+        SECTION("4x4 General Matrix Determinant") {
+            Matrix<float, 4, 4> u = {{8.0, 5.0, -2.0, 4.0}, {4.0, 2.5, 20.0, 4.0}, {8.0, 5.0, 1.0, 4.0}, {28.0, -4.0, 17.0, 1.0}};
+            float det = u.determinant();
+            REQUIRE(are_close(det, 1032.0, 0.01));
+        }
+    }
+
+    /////EX12///////
+    TEST_CASE("Matrix inverse calculation")
+    {
+        SECTION("3x3 Identity Matrix Inverse") {
+            Matrix<float, 3, 3> u = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
+            Matrix<float, 3, 3> result = u.inverse();
+            REQUIRE(are_close(result[0][0], 1.0, 0.01));
+            REQUIRE(are_close(result[0][1], 0.0, 0.01));
+            REQUIRE(are_close(result[0][2], 0.0, 0.01));
+            REQUIRE(are_close(result[1][0], 0.0, 0.01));
+            REQUIRE(are_close(result[1][1], 1.0, 0.01));
+            REQUIRE(are_close(result[1][2], 0.0, 0.01));
+            REQUIRE(are_close(result[2][0], 0.0, 0.01));
+            REQUIRE(are_close(result[2][1], 0.0, 0.01));
+            REQUIRE(are_close(result[2][2], 1.0, 0.01));
+        }
+
+        SECTION("3x3 Diagonal Matrix Inverse") {
+            Matrix<float, 3, 3> u = {{2.0, 0.0, 0.0}, {0.0, 2.0, 0.0}, {0.0, 0.0, 2.0}};
+            Matrix<float, 3, 3> result = u.inverse();
+            REQUIRE(are_close(result[0][0], 0.5, 0.01));
+            REQUIRE(are_close(result[0][1], 0.0, 0.01));
+            REQUIRE(are_close(result[0][2], 0.0, 0.01));
+            REQUIRE(are_close(result[1][0], 0.0, 0.01));
+            REQUIRE(are_close(result[1][1], 0.5, 0.01));
+            REQUIRE(are_close(result[1][2], 0.0, 0.01));
+            REQUIRE(are_close(result[2][0], 0.0, 0.01));
+            REQUIRE(are_close(result[2][1], 0.0, 0.01));
+            REQUIRE(are_close(result[2][2], 0.5, 0.01));
+        }
+
+        SECTION("3x3 General Matrix Inverse") {
+            Matrix<float, 3, 3> u = {{8.0, 5.0, -2.0}, {4.0, 7.0, 20.0}, {7.0, 6.0, 1.0}};
+            Matrix<float, 3, 3> result = u.inverse();
+            REQUIRE(are_close(result[0][0], 0.649425287, 0.01));
+            REQUIRE(are_close(result[0][1], 0.097701149, 0.01));
+            REQUIRE(are_close(result[0][2], -0.655172414, 0.01));
+            REQUIRE(are_close(result[1][0], -0.781609195, 0.01));
+            REQUIRE(are_close(result[1][1], -0.126436782, 0.01));
+            REQUIRE(are_close(result[1][2], 0.965517241, 0.01));
+            REQUIRE(are_close(result[2][0], 0.143678161, 0.01));
+            REQUIRE(are_close(result[2][1], 0.074712644, 0.01));
+            REQUIRE(are_close(result[2][2], -0.206896552, 0.01));
+        }
+    }
+
+
+    /////EX12///////
+
+    TEST_CASE("Matrix rank calculation")
+    {
+        SECTION("Test 1: 3x3 Identity Matrix Rank") {
+            Matrix<float, 3, 3> u = {{1.0, 0.0, 0.0}, {0.0, 1.0, 0.0}, {0.0, 0.0, 1.0}};
+            int result = u.rank();
+            REQUIRE(result == 3);
+        }
+
+        SECTION("Test 2: 3x4 Matrix Rank") {
+            Matrix<float, 3, 4> u = {{1.0, 2.0, 0.0, 0.0}, {2.0, 4.0, 0.0, 0.0}, {-1.0, 2.0, 1.0, 1.0}};
+            int result = u.rank();
+            REQUIRE(result == 2);
+        }
+
+        SECTION("Test 3: 4x3 Matrix Rank") {
+            Matrix<float, 4, 3> u = {{8.0, 5.0, -2.0}, {4.0, 7.0, 20.0}, {7.0, 6.0, 1.0}, {21.0, 18.0, 7.0}};
+            int result = u.rank();
+            REQUIRE(result == 3);
+        }
+    }
