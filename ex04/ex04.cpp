@@ -2,34 +2,8 @@
 #include "colours.hpp"
 #include <vector>
 #include "Vector.hpp"
-
-
 #include <stdexcept>
 #include <iostream>
-
-/*
-    You must write functions that compute different kinds of norms.
-    You must also turn in a main function in order to test your functions, ready to be
-    compiled (if necessary) and run.
-    VIII.0.2 Instructions
-    Let v be a vector of a vector space V .
-    You must implement the following norms:
-    - 1-norm: ∥v∥1 (also called the Taxicab norm or Manhattan norm)
-    - 2-norm: ∥v∥ or ∥v∥2 (also called the Euclidean norm)
-    - ∞-norm: ∥v∥∞ (also called the supremum norm)
-
-    let u = Vector::from([0., 0., 0.]);
-    println!("{}, {}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
-    // 0.0, 0.0, 0.0
-    let u = Vector::from([1., 2., 3.]);
-    println!("{}, {}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
-    // 6.0, 3.74165738, 3.0
-    let u = Vector::from([-1., -2.]);
-    println!("{}, {}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
-    // 3.0, 2.236067977, 2.0
-
-
-*/
 
 
 

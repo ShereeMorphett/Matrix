@@ -256,74 +256,52 @@ class Matrix : public MatrixInit<T, Rows, Cols>
             if (lead >= Cols)
                 return result;
 
-            // Find the row with the largest absolute value in the current column
             size_t i = r;
-            for (size_t k = r + 1; k < Rows; ++k)
+            while (result[i][lead] == 0)
             {
-                if (std::abs(result[k][lead]) > std::abs(result[i][lead]))
+                ++i;
+                if (i == Rows)
                 {
-                    i = k;
+                    i = r;
+                    ++lead;
+                    if (lead == Cols)
+                        return result;
                 }
             }
 
-            // If the pivot is zero, move to the next column
-            if (result[i][lead] == 0)
-            {
-                lead++;
-                if (lead >= Cols)
-                    return result;
-                continue;
-            }
+            std::swap(result.components[i], result.components[r]);
 
-            // Swap rows if necessary
-            if (i != r)
-            {
-                std::swap(result[r], result[i]);
-            }
-
-            // Normalize the leading row
             T div = result[r][lead];
-            for (size_t j = lead; j < Cols; ++j)
-            {
+            for (size_t j = 0; j < Cols; ++j)
                 result[r][j] /= div;
-            }
 
-            // Eliminate entries below the pivot
-            for (size_t i = r + 1; i < Rows; ++i)
+            for (size_t i = 0; i < Rows; ++i)
             {
-                T factor = result[i][lead];
-                for (size_t j = lead; j < Cols; ++j)
+                if (i != r)
                 {
-                    result[i][j] -= factor * result[r][j];
+                    T sub = result[i][lead];
+                    for (size_t j = 0; j < Cols; ++j)
+                        result[i][j] -= sub * result[r][j];
                 }
             }
-
-            lead++;
-        }
-        // Handle zero rows (move zero rows to the bottom)
-        size_t non_zero_row = Rows - 1;
-        for (size_t r = Rows - 1; r >= 0; --r)
-        {
-            bool is_zero_row = true;
-            for (size_t c = 0; c < Cols; ++c)
-            {
-                if (result[r][c] != 0)
-                {
-                    is_zero_row = false;
-                    break;
-                }
-            }
-            if (is_zero_row)
-            {
-                std::swap(result[r], result[non_zero_row]);
-                --non_zero_row;
-            }
-            if (r == 0)
-                break;
+            ++lead;
         }
 
         return result;
     }
+
+    void print() const
+    {
+        for (int i = 0; i < Rows; ++i)
+        {
+            for (int j = 0; j < Cols; ++j)
+            {
+                std::cout << std::setw(10) << (*this)[i][j] << " ";
+            }
+            std::cout << std::endl;
+        }
+    }
+
 
 };
 

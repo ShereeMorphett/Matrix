@@ -435,6 +435,27 @@ class Matrix : public MatrixInit<T, Rows, Cols>
         return result;
     }
 
+    size_t rank() const
+    {
+        Matrix<T, Rows, Cols> rref = this->row_echelon();
+        size_t rank = 0;
+
+        for (size_t i = 0; i < Rows; ++i)
+        {
+            bool non_zero_row = false;
+            for (size_t j = 0; j < Cols; ++j)
+            {
+                if (std::abs(rref[i][j]) > 1e-9)
+                {
+                    non_zero_row = true;
+                    break;
+                }
+            }
+            if (non_zero_row)
+                ++rank;
+        }
+        return rank;
+    }
 };
 
 template <typename T>
