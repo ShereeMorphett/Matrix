@@ -6,6 +6,8 @@
 #include <limits>
 #include <cmath>
 #include <cassert>
+#include <vector>
+
 
 
 template <typename T, size_t Size>
