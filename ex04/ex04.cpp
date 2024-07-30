@@ -14,11 +14,6 @@ int main() {
     Vector<float> v = {1.0, 2.0, 3.0};
     Vector<float> w = {-1.0, -2.0};
 
-/*    let u = Vector::from([-1., -2.]);
-    println!("{}, {}, {}, {}", u.norm_1(), u.norm(), u.norm_inf());
-    // 3.0, 2.236067977, 2.0
-*/
-
     std::cout << FCYN("Expected Output: ") << std::endl;
     std::cout << FCYN("0.0\n6.0\n3.0") << std::endl;
 

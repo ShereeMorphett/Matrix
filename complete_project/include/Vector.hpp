@@ -7,8 +7,7 @@
 #include <cmath>
 #include <cassert>
 #include <vector>
-
-
+#include <algorithm>
 
 template <typename T, size_t Size>
 struct VectorStorage
@@ -22,8 +21,6 @@ struct VectorStorage
 
 template <typename T, size_t Size>
 struct VectorInit;
-
-// Vector.hpp
 
 template <typename T, size_t Size>
 struct VectorInit : public VectorStorage<T, Size>
@@ -40,7 +37,6 @@ struct VectorInit : public VectorStorage<T, Size>
     }
 };
 
-// Specialization for specific sizes
 template <typename T>
 struct VectorInit<T, 2> : public VectorStorage<T, 2>
 {
@@ -82,7 +78,6 @@ struct VectorInit<T, 4> : public VectorStorage<T, 4>
      : base{ {{ x, y, z, w }} }
     {}
 };
-// Vector.hpp
 
 template <typename T, size_t Size>
 struct Vector : public VectorInit<T, Size>
@@ -138,7 +133,7 @@ struct Vector : public VectorInit<T, Size>
         }
         return result;
     }
-
+    
     // Equality operator
     bool operator==(const Vector<T, Size>& rhs) const
     {
@@ -150,20 +145,17 @@ struct Vector : public VectorInit<T, Size>
         return true;
     }
     
-    // Static method to compute linear combination
     static Vector<T, Size> linear_combination(const std::vector<Vector<T, Size>>& vectors, const std::vector<T>& coefs)
     {
         if (vectors.size() != coefs.size()) {
             throw std::invalid_argument("Vectors and coefficients must be of the same size.");
         }
 
-        // Initialize result vector with zeros
         Vector<T, Size> result;
         for (size_t i = 0; i < Size; ++i) {
             result[i] = T();
         }
 
-        // Compute the linear combination
         for (size_t i = 0; i < vectors.size(); ++i) {
             for (size_t j = 0; j < Size; ++j) {
                 result[j] += vectors[i][j] * coefs[i];
@@ -222,9 +214,8 @@ struct Vector : public VectorInit<T, Size>
     }
 };
 
-
 template <typename T>
-T lerp_single(T const & u, T const & v, float t)
+T lerp_single(const T &u, const T &v, float t)
 {
     return u + t * (v - u);
 }
@@ -239,13 +230,11 @@ Vector<T, 3> cross_product(const Vector<T, 3>& v, const Vector<T, 3>& u)
     return result;
 }
 
-
 template <typename VecType>
-VecType lerp( VecType const & u, VecType  const & v, float t)
+VecType lerp(const VecType &u, const VecType &v, float t, std::enable_if_t<!std::is_arithmetic<VecType>::value, VecType>* = 0)
 {
-    if (u.size() != v.size()) {
+    if (u.size() != v.size())
         throw std::invalid_argument("Vectors must be of the same size");
-    }
 
     VecType result;
     for (size_t i = 0; i < u.size(); ++i)
@@ -256,10 +245,12 @@ VecType lerp( VecType const & u, VecType  const & v, float t)
     return result;
 }
 
+template <typename T>
+T lerp(const T &u, const T &v, float t, std::enable_if_t<std::is_arithmetic<T>::value, T>* = 0)
+{
+    return lerp_single(u, v, t);
+}
 
-// Method to compute the cosine of the angle between two vectors
-// The cosine of the angle between two vectors 
-// u and v can be found using the dot product and the magnitudes (norms) of the vectors
 template <typename T, size_t Size>
 T angle_cos(const Vector<T, Size>& u, const Vector<T, Size>& v)
 {
