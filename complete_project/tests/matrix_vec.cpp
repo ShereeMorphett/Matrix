@@ -78,8 +78,8 @@ TEST_CASE("Vector linear combination")
     Vector<double, 3> e3({0.0, 0.0, 1.0});
 
     // Define coefficients
-    std::vector<Vector<double, 3>> vectors = {e1, e2, e3};
-    std::vector<double> coefs = {10.0, -2.0, 0.5};
+    Vector<Vector<double, 3>, 3> vectors = {e1, e2, e3};
+    Vector<double, 3> coefs = {10.0, -2.0, 0.5};
 
     SECTION("Testing linear combination with 3 vectors")
     {
@@ -94,8 +94,8 @@ TEST_CASE("Vector linear combination")
     // Another set of vectors and coefficients
     Vector<double, 3> vec1({1.0, 2.0, 3.0});
     Vector<double, 3> vec2({0.0, 10.0, -100.0});
-    std::vector<double> coefs2 = {10.0, -2.0};
-    std::vector<Vector<double, 3>> vectors2 = {vec1, vec2};
+    Vector<double, 2> coefs2 = {10.0, -2.0};
+    Vector<Vector<double, 3>, 2> vectors2 = {vec1, vec2};
 
     SECTION("Testing linear combination with 2 vectors")
     {

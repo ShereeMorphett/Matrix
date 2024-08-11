@@ -144,26 +144,28 @@ struct Vector : public VectorInit<T, Size>
         }
         return true;
     }
-    
-    static Vector<T, Size> linear_combination(const std::vector<Vector<T, Size>>& vectors, const std::vector<T>& coefs)
+
+    template<std::size_t InnerSize, std::size_t OuterSize>
+    static Vector<T, InnerSize> linear_combination(Vector<Vector<T, InnerSize>, OuterSize>& vectors, Vector<T, OuterSize>& coefs)
     {
         if (vectors.size() != coefs.size()) {
             throw std::invalid_argument("Vectors and coefficients must be of the same size.");
         }
 
-        Vector<T, Size> result;
-        for (size_t i = 0; i < Size; ++i) {
+        Vector<T, InnerSize> result; 
+        for (size_t i = 0; i < InnerSize; ++i) {
             result[i] = T();
         }
 
-        for (size_t i = 0; i < vectors.size(); ++i) {
-            for (size_t j = 0; j < Size; ++j) {
+        for (size_t i = 0; i < OuterSize; ++i) { 
+            for (size_t j = 0; j < InnerSize; ++j) {  
                 result[j] += vectors[i][j] * coefs[i];
             }
         }
 
         return result;
     }
+
 
 
     T dot(const Vector<T, Size>& b) const

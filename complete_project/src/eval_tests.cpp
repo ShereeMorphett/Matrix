@@ -1,5 +1,5 @@
 #include <iostream>
-#include <vector>
+// #include <vector>
 #include "Matrix.hpp"
 #include "Vector.hpp"
 #include "colours.hpp"
@@ -184,43 +184,43 @@ int main()
 
     std::cout << FCYN("\n~~~~Linear Combination~~~~\n")  << std::endl;
     {
-        std::vector<Vector<double, 2>> vectors = { Vector<double, 2>{-42., 42.} };
-        std::vector<double> coefficients = { -1. };
+        Vector<Vector<double, 2>, 1> vectors = { Vector<double, 2>{-42., 42.} };
+        Vector<double, 1> coefficients = { -1. };
         auto result = Vector<double, 2>::linear_combination(vectors, coefficients);
         std::cout << "Test 1 result: " << result << std::endl;
         std::cout << FMAG("Expected: [42, -42]")  << std::endl;
     }
     {
-        std::vector<Vector<double, 1>> vectors = {
+        Vector<Vector<double, 1>, 3> vectors = {
             Vector<double, 1>{-42.},
             Vector<double, 1>{-42.},
             Vector<double, 1>{-42.}
         };
-        std::vector<double> coefficients = { -1., 1., 0. };
+        Vector<double, 3> coefficients = { -1., 1., 0. };
         auto result = Vector<double, 1>::linear_combination(vectors, coefficients);
         std::cout << "Test 2 result: " << result << std::endl;
         std::cout << FMAG("Expected: [0]")  << std::endl;  
     }
 
     {
-        std::vector<Vector<double, 2>> vectors =
+        Vector<Vector<double, 2>, 3> vectors =
         {
             Vector<double, 2>{-42., 42.},
             Vector<double, 2>{1., 3.},
             Vector<double, 2>{10., 20.}
         };
-        std::vector<double> coefficients = { 1., -10., -1. };
+        Vector<double, 3> coefficients = { 1., -10., -1. };
         auto result = Vector<double, 2>::linear_combination(vectors, coefficients);
         std::cout << FMAG("Expected: [-62, -8]")  << std::endl;
         std::cout << "Test 3 result: " << result << std::endl;
     }
 
     {
-        std::vector<Vector<double, 3>> vectors = {
+        Vector<Vector<double, 3>, 2> vectors = {
             Vector<double, 3>{-42., 100., -69.5},
             Vector<double, 3>{1., 3., 5.}
         };
-        std::vector<double> coefficients = { 1., -10. };
+        Vector<double, 2> coefficients = { 1., -10. };
         auto result = Vector<double, 3>::linear_combination(vectors, coefficients);
         std::cout << FMAG("Expected: [-52, 70, -119.5]")  << std::endl;
         std::cout << "Test 4 result: " << result << std::endl;
