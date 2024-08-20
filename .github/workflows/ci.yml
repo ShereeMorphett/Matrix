@@ -5,6 +5,7 @@ on:
         paths:
             - "**.hpp"
             - "**.cpp"
+            - "**/mat_vec"
             - "**/meson.build"
             - "**/workflows/ci.yaml"
     workflow_dispatch:
